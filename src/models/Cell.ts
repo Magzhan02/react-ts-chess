@@ -8,7 +8,7 @@ export class Cell {
   readonly color: Colors;
   figure: Figure | null;
   board: Board;
-  availabe: boolean; // for access figure
+  available: boolean; // for access figure
   id: number; // react key
 
   constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
@@ -17,7 +17,15 @@ export class Cell {
     this.board = board;
     this.color = color;
     this.figure = figure;
-    this.availabe = false;
+    this.available = false;
     this.id = Math.random();
+  }
+
+  moveFigure(target: Cell) {
+    if (this.figure && this.figure?.canMove(target)) {
+      this.figure.moveFigure(target);
+      target.figure = this.figure;
+      this.figure = null;
+    }
   }
 }

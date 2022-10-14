@@ -1,3 +1,9 @@
+import { Rook } from './figures/Rook';
+import { Bishop } from './figures/Bishop';
+import { Knight } from './figures/Knight';
+import { Pawn } from './figures/Pawn';
+import { King } from './figures/King';
+import { Queen } from './figures/Queen';
 import { Colors } from './Colors';
 import { Cell } from './Cell';
 
@@ -16,5 +22,66 @@ export class Board {
       }
       this.cells.push(row);
     }
+  }
+  public getCell(x: number, y: number) {
+    return this.cells[y][x];
+  }
+
+  public highLightCells(selectedCell: Cell | null) {
+    for (let i = 0; i < this.cells.length; i++) {
+      const row = this.cells[i];
+      for (let j = 0; j < row.length; j++) {
+        const target = row[j];
+        target.available = !!selectedCell?.figure?.canMove(target);
+      }
+    }
+  }
+
+  public getCopyBoard(): Board {
+    const newBoard = new Board();
+    newBoard.cells = this.cells;
+    return newBoard;
+  }
+
+  private addKing() {
+    new King(Colors.BLACK, this.getCell(4, 0));
+    new King(Colors.WHITE, this.getCell(4, 7));
+  }
+  private addQueen() {
+    new Queen(Colors.BLACK, this.getCell(3, 0));
+    new Queen(Colors.WHITE, this.getCell(3, 7));
+  }
+  private addPawn() {
+    for (let index = 0; index < 8; index++) {
+      new Pawn(Colors.BLACK, this.getCell(index, 1));
+      new Pawn(Colors.WHITE, this.getCell(index, 6));
+    }
+  }
+  private addKnight() {
+    new Knight(Colors.BLACK, this.getCell(1, 0));
+    new Knight(Colors.BLACK, this.getCell(6, 0));
+    new Knight(Colors.WHITE, this.getCell(1, 7));
+    new Knight(Colors.WHITE, this.getCell(6, 7));
+  }
+  private addBishop() {
+    new Bishop(Colors.BLACK, this.getCell(2, 0));
+    new Bishop(Colors.BLACK, this.getCell(5, 0));
+    new Bishop(Colors.WHITE, this.getCell(2, 7));
+    new Bishop(Colors.WHITE, this.getCell(5, 7));
+  }
+  private addRook() {
+    new Rook(Colors.BLACK, this.getCell(0, 0));
+    new Rook(Colors.BLACK, this.getCell(7, 0));
+    new Rook(Colors.WHITE, this.getCell(0, 7));
+    new Rook(Colors.WHITE, this.getCell(7, 7));
+  }
+
+  public addFigures() {
+    this.addBishop();
+    this.addKing();
+    this.addPawn();
+    this.addKnight();
+    this.addRook();
+    this.addQueen();
   }
 }
